@@ -19,9 +19,15 @@ class _HomePageState extends State<HomePage> {
   //Create a variable that captures the input of a text input
   final TextEditingController nameController = TextEditingController();
 
-  // Fetch tasks from the db and also update the task list in memory
+  @override
+  void initState() {
+    super.initState();
+    fetchTasks();
+  }
+
+  //Fetch tasks  from the db and also update the tasks list in memory
   Future<void> fetchTasks() async {
-    final snapshots = await db.collection('tasks').orderBy('timestamp.').get();
+    final snapshots = await db.collection('tasks').orderBy('timestamp').get();
 
     setState(() {
       tasks.clear();
@@ -30,11 +36,23 @@ class _HomePageState extends State<HomePage> {
           (doc) => {
             'id': doc.id,
             'name': doc['name'],
-            'timestamp': doc['timestamp'],
+            'completed': doc.get('completed') ?? false,
           },
         ),
       );
     });
+  }
+
+  //function add new tasks to local state & firestore database
+  Future<void> addTask() async {
+    final taskName = nameController.text.trim();
+    if (taskName.isNotEmpty) {
+      final newTask = {
+        'name': taskName,
+        'completed': false,
+        'timestamp': FieldValue.serverTimestamp(),
+      };
+    }
   }
 
   @override
