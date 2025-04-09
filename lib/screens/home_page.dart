@@ -43,9 +43,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  //function add new tasks to local state & firestore database
+  //function add new task to local state & firestore database
   Future<void> addTask() async {
     final taskName = nameController.text.trim();
+
     if (taskName.isNotEmpty) {
       final newTask = {
         'name': taskName,
@@ -75,19 +76,23 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          Column(
-            children: [
-              TableCalendar(
+      body: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 340,
+              child: TableCalendar(
                 calendarFormat: CalendarFormat.month,
                 focusedDay: DateTime.now(),
                 firstDay: DateTime(2025),
                 lastDay: DateTime(2026),
               ),
-            ],
-          ),
-        ],
+            ),
+            Expanded(
+              child: Container(child: buildAddTaskSection(nameController)),
+            ),
+          ],
+        ),
       ),
       drawer: Drawer(),
     );
@@ -100,8 +105,7 @@ Widget buildAddTaskSection(nameController) {
     padding: const EdgeInsets.all(12.0),
     child: Row(
       children: [
-        Container(
-          decoration: BoxDecoration(color: Colors.white),
+        Expanded(
           child: TextField(
             maxLength: 32,
             controller: nameController,
