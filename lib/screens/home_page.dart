@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+// HomePage is the main screen of the app
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -10,6 +11,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+// This class holds the state of the HomePage
 class _HomePageState extends State<HomePage> {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -62,10 +64,13 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         tasks.add({'id': docRef.id, ...newTask});
       });
+
+      // Clear the input field after adding
       nameController.clear();
     }
   }
 
+  // Build the UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +79,9 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            // Display the logo image
             Expanded(child: Image.asset('assets/rdplogo.png', height: 80)),
+            // App title
             Text(
               'RDP Daily Planner',
               style: TextStyle(
@@ -89,6 +96,7 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
+            // Calendar widget at the top of the screen
             SizedBox(
               height: 340,
               child: TableCalendar(
@@ -98,11 +106,16 @@ class _HomePageState extends State<HomePage> {
                 lastDay: DateTime(2026),
               ),
             ),
+
+            // Input field and "Add Task" button
             Expanded(
               child: Container(
                 child: buildAddTaskSection(nameController, addTask),
               ),
             ),
+
+            // (Optional) You could uncomment this to show the task list
+            // Expanded(child: buildTaskList(tasks)),
           ],
         ),
       ),
@@ -117,6 +130,7 @@ Widget buildAddTaskSection(nameController, addTask) {
     padding: const EdgeInsets.all(12.0),
     child: Row(
       children: [
+        // Text input field for task name
         Expanded(
           child: TextField(
             maxLength: 32,
@@ -133,15 +147,18 @@ Widget buildAddTaskSection(nameController, addTask) {
   );
 }
 
+// Widget for displaying the list of tasks
 Widget buildTaskList(tasks) {
   return ListView.builder(
     physics: NeverScrollableScrollPhysics(),
     shrinkWrap: true,
     itemCount: tasks.length,
     itemBuilder: (context, index) {
+      // Each task displayed in a styled ListTile
       return ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       );
+      // Task data (name, etc.) could be added here
     },
   );
 }
