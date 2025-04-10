@@ -35,11 +35,16 @@ class _HomePageState extends State<HomePage> {
 
   // Function to get tasks from Firestore
   Future<void> fetchTasks() async {
-    final snapshot = await db.collection('tasks').orderBy('timestamp').get(); // Get all tasks ordered by time
+    final snapshot =
+        await db
+            .collection('tasks')
+            .orderBy('timestamp')
+            .get(); // Get all tasks ordered by time
 
     setState(() {
       tasks.clear(); // Clear old tasks
-      tasks.addAll( // Add new tasks from Firestore
+      tasks.addAll(
+        // Add new tasks from Firestore
         snapshot.docs.map(
           (doc) => {
             'id': doc.id, // Task ID
@@ -199,7 +204,8 @@ Widget buildAddTaskSection(nameController, addTask) {
 Widget buildTaskList(tasks, removeTasks, updateTask) {
   return ListView.builder(
     shrinkWrap: true, // Use minimum space
-    physics: const NeverScrollableScrollPhysics(), // Disable scroll inside scroll
+    physics:
+        const NeverScrollableScrollPhysics(), // Disable scroll inside scroll
     itemCount: tasks.length, // Total number of tasks
     itemBuilder: (context, index) {
       final task = tasks[index]; // Get task data
@@ -208,9 +214,10 @@ Widget buildTaskList(tasks, removeTasks, updateTask) {
       return Padding(
         padding: EdgeInsets.all(1.0), // Space around each task
         child: ListTile(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), // Rounded corners
-          tileColor: isEven ? Colors.blue : Colors.green, // Alternate colors
-
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ), // Rounded corners
+          tileColor: isEven ? Colors.blue : Colors.pink, // Alternate colors
           // Icon for completed/incomplete
           leading: Icon(
             task['completed'] ? Icons.check_circle : Icons.circle_outlined,
@@ -232,7 +239,8 @@ Widget buildTaskList(tasks, removeTasks, updateTask) {
               // Checkbox to mark task done/undone
               Checkbox(
                 value: task['completed'], // Current value
-                onChanged: (value) => updateTask(index, value!), // Update on change
+                onChanged:
+                    (value) => updateTask(index, value!), // Update on change
               ),
 
               // Delete button
